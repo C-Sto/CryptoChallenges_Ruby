@@ -7,5 +7,14 @@ How? Devise some method for "scoring" a piece of English plaintext. Character fr
 Evaluate each output and choose the one with the best score.
 =end
 
-hexString = 0x1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736
+require_relative("Libs/TextAnalysis")
+require_relative("Libs/StringFuncs")
 
+hexString = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
+
+byteString = hexToBytes([hexString])
+
+for c in  [byteString.split()]
+  puts c
+  puts "zz"
+end
