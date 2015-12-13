@@ -3,7 +3,7 @@ require_relative("TextAnalysis")
 def singleCharXorChar(xor_str)
   #returns a char that when xord against the supplied ciphertext results in english-like plaintext
   #keep a highest number variable
-  highest = 0
+  highest = 10000000
   highestText = ''
   highestChar = 0
   #iterate over each byte (0-255)
@@ -12,7 +12,7 @@ def singleCharXorChar(xor_str)
     this_text = singleCharXorStr(xor_str,i)
     score = scorePlaintext(this_text)
     #remember highest score
-    if score>highest
+    if score<highest
       highest = score
       highestText = this_text
       highestChar = i.chr

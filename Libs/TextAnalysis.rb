@@ -31,16 +31,35 @@ double scorePlaintext(std::string s){
 =end
 
 def scorePlaintext(text)
+
   alphabet = "abcdefghijklmnopqrstuvwxyz \n1234567891234567890!@#$%^&*()_+0-=\\][';/.,<>?:\"{}|"
   total = 0
   tested = Array.new
-  testable = alphabet.split()
+  testable = alphabet.split("")
   text = text.downcase
+
   for c in testable
-    value = chiSquare(text, c)
-    total+=value
-    tested.push(c)
+      value = chiSquare(text, c)
+      total+=value
+      tested.push(c)
   end
+
+  for c in text.split("")
+
+    if tested.include? c
+      next
+    end
+
+    if !isPrint(c) && c != '\n'
+      total += text.size*2
+    else
+      total += chiSquare(text, c)
+    end
+
+    tested.push(c)
+
+  end
+
   return total
 end
 
@@ -51,7 +70,9 @@ def chiSquare(text, letter)
           "k"=>0.772, "l"=>4.025, "m"=>2.406, "n"=>6.749, "o"=>7.507,
           "p"=>1.929, "q"=>0.095, "r"=>5.987, "s"=>6.327, "t"=>9.056,
           "u"=>2.758, "v"=>0.978, "w"=>2.360, "x"=>0.150, "y"=>1.974,
-          "z"=>0.074, " "=>15.00, "\n"=>0.01}
+          "z"=>0.074, " "=>55.00, "\n"=>0.01, "."=>6.53, ","=>6.16,
+          ";"=>0.32,  ":"=>0.34,  "!"=>0.33,  "?"=>0.56, "'"=>2.43,
+          '"'=>2.67,  "-"=>1.53}
   #chi square is simply the difference in counted vs expected occurence ratio squared, divided by the expected ratio
   #It will give us a good scoring system for english
   count = text.count(letter)
@@ -84,4 +105,8 @@ end
 
 def isPunct(char)
   return char=~/[[:punct:]]/
+end
+
+def isPrint(char)
+  return char=~/[^[:print:]]/
 end

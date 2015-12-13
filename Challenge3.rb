@@ -15,9 +15,8 @@ require_relative("Libs/XorFuncs")
 
 hexString = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
-byteString = hexToBytes([hexString])Func
+byteString = hexToBytes([hexString])
 
 #print results
-#puts "Highest plaintext score: " +highest.to_s
 puts "Xor key: "+singleCharXorChar(byteString)
 puts "Resultant plaintext: "+singleCharXorStr(byteString,singleCharXorChar(byteString).ord)
