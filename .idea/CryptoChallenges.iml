@@ -23,8 +23,8 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="ruby-2.1.7-p400" jdkType="RUBY_SDK" />
+    <orderEntry type="jdk" jdkName="RVM: ruby-2.1.7 [metasploit-framework]" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="psych (v2.0.5, ruby-2.1.7-p400) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="io-console (v0.4.3, RVM: ruby-2.1.7 [metasploit-framework]) [gem]" level="application" />
   </component>
 </module>

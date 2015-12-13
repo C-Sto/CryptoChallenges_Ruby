@@ -14,7 +14,29 @@ hexString = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b373
 
 byteString = hexToBytes([hexString])
 
-for c in  [byteString.split()]
-  puts c
-  puts "zz"
+#keep a highest number variable
+highest = 0
+highestText = ''
+highestChar = 0
+
+#iterate over each byte (0-255)
+for i in 0..255
+  testString = ''
+  #create new string from byte and xor of each character
+  byteString.each_byte do |c|
+     testString+=(c^i).chr
+  end
+  #score the string
+  score = scorePlaintext(testString)
+  #remember highest score
+  if score>highest
+    highest = score
+    highestText = testString
+    highestChar = i.chr
+  end
 end
+
+#print results
+puts "Highest plaintext score: " +highest.to_s
+puts "Resultant plaintext: "+highestText
+puts "Xor key: "+highestChar
