@@ -8,6 +8,7 @@ test = 0x746865206b696420646f6e277420706c6179
 #xor the things
 c = before^xorTarget
 
+puts "Testing.."
 #print the result
 if test == c
   puts "True"

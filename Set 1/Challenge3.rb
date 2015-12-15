@@ -7,8 +7,8 @@ How? Devise some method for "scoring" a piece of English plaintext. Character fr
 Evaluate each output and choose the one with the best score.
 =end
 
-require_relative("Libs/StringFuncs")
-require_relative("Libs/XorFuncs")
+require_relative("../Libs/StringFuncs")
+require_relative("../Libs/XorFuncs")
 
 #functionize things
 

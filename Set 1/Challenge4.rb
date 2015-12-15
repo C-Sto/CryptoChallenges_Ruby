@@ -4,8 +4,8 @@ One of the 60-character strings in this file has been encrypted by single-charac
 Find it.
 (Your code from #3 should help.)
 =end
-require_relative("Libs/StringFuncs")
-require_relative("Libs/XorFuncs")
+require_relative("../Libs/StringFuncs")
+require_relative("../Libs/XorFuncs")
 
 strList = Array.new
 
