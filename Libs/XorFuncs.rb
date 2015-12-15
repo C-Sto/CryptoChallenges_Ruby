@@ -29,3 +29,18 @@ def singleCharXorStr(xor_str, xor_chr)
   end
   return ret
 end
+
+def repeatingKeyXor(plain, key)
+  #returns a string xor'd against a repeating set of chars
+  count = 0
+  ret = ""
+  plain.each_byte do |c|
+    ret+=( c ^ key[count].ord ).chr
+    if count == key.size-1
+      count = 0
+    else
+      count += 1
+    end
+  end
+  return ret
+end
