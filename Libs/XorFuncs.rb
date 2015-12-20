@@ -6,7 +6,7 @@ def singleCharXorChar(xor_str)
   lowest = 99999999999
   lowestText = ''
   lowestChar = 0
-  puts "Cracking.."
+  #puts "Cracking.."
   #iterate over each byte (0-255)
   for i in 0..255
     #score the string
@@ -19,8 +19,8 @@ def singleCharXorChar(xor_str)
       lowestChar = i.chr
     end
   end
-  puts "cracking complete"
-  puts "most likely char: "+lowestChar
+  #puts "cracking complete"
+  #puts "most likely char: "+lowestChar
   return lowestChar
 end
 
