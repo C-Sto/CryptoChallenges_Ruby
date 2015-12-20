@@ -14,6 +14,7 @@ Decrypt it.
 Here's how:
 Let KEYSIZE be the guessed length of the key; try values from 2 to (say) 40.
 Write a function to compute the edit distance/Hamming distance between two strings.
+
 The Hamming distance is just the number of differing bits. The distance between:
     this is a test
 and
@@ -40,4 +41,11 @@ No, that's not a mistake.
 We get more tech support questions for this challenge than any of the other ones.
 We promise, there aren't any blatant errors in this text.
 In particular: the "wokka wokka!!!" edit distance really is 37.
-    =end
+
+=end
+
+require_relative("../Libs/StringFuncs")
+puts "Testing hamming code, should equal 37"
+puts hammingDistance("wokka wokka!!!", "this is a test")
+
+
