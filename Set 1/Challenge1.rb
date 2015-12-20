@@ -18,8 +18,12 @@ require_relative("../Libs/StringFuncs")
 
 #hex representation
 hexString = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
+puts "Converting Hex to base 64"
+puts "Hex string: "+hexString
 #target string
 testString = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
+
+puts "Target:\t"+testString
 
 #turn to an array
 arrayHexString = [hexString]
@@ -27,14 +31,10 @@ arrayHexString = [hexString]
 #unpack and re-encode to base64. Strict is used to avoid linefeeds
 ts2 = Base64.strict_encode64(arrayHexString.pack('H*'))
 
-puts ts2
-
-puts testString
-
-puts ts2 == testString
+puts "Result:\t"+ts2
 
 #for fun, the plaintext of the string to encode
 
-puts ""
+puts "Plaintext: "
 
 puts hexToBytes(arrayHexString)
