@@ -45,7 +45,20 @@ In particular: the "wokka wokka!!!" edit distance really is 37.
 =end
 
 require_relative("../Libs/StringFuncs")
+require("base64")
 puts "Testing hamming code, should equal 37"
 puts hammingDistance("wokka wokka!!!", "this is a test")
+
+puts "Loading file"
+file = File.open("./Resources/6.txt").read()
+puts Base64.decode64(file)
+
+puts "Working out key-size"
+
+
+
+for possibleKeySize in 2..40
+  #Turn the file into chunks
+end
 
 
