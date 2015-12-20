@@ -42,7 +42,8 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="RVM: ruby-2.1.7 [global]" jdkType="RUBY_SDK" />
+    <orderEntry type="jdk" jdkName="ruby-2.0.0-p645" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="minitest (v4.3.2, ruby-2.0.0-p645) [gem]" level="application" />
   </component>
 </module>
