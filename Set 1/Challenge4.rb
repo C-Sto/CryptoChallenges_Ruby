@@ -35,6 +35,6 @@ for l in strList
     toptext = l
   end
 end
-puts "Best, printing winner, and score"
+puts "Finished, printing winner, and score"
 puts toptext
 puts scorePlaintext(toptext)

@@ -19,8 +19,11 @@ Encrypt a bunch of stuff using your repeating-key XOR function. Encrypt your mai
 =end
 
 require_relative("../Libs/XorFuncs")
-
+puts "Implementing repeating char XOR."
+puts "Turning:"
 str_to_enc = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
+puts "Into:"
+puts str_to_enc
 
 enc_key = "ICE"
 
@@ -28,6 +31,8 @@ compareval = "0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324
 
 puts compareval
 
-genval = repeatingKeyXor(str_to_enc,enc_key).unpack("H*")
-
+genval = repeatingKeyXor(str_to_enc,enc_key).unpack("H*").join
+puts "Result:"
 puts genval
+puts "Checking for match..."
+puts genval == compareval
