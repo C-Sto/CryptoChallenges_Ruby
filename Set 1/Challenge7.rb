@@ -16,3 +16,6 @@ but we're having you get ECB working in code for a reason.
 You'll need it a lot later on, and not just for attacking ECB.
 
 =end
+
+require_relative("../Libs/AES/AES")
+
