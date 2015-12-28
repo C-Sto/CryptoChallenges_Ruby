@@ -7,7 +7,7 @@ def rot(val)
 end
 
 def rotL(val)
-  return ((val << 8) | (val >> (32-8))) & 0xFFFFFFFF
+  return ((val << 8) | (val >> (24))) & 0xFFFFFFFF
 end
 
 def rotR
@@ -45,8 +45,27 @@ def finMult(a, b)
 
 end
 
-def finInv(val)
+def finiteInv(val)
+  (0..255).each() do |i|
+    if(finMult(i,val)==1)
+      return i
+    end
+  end
+end
 
+def transform(val)
+  #    Store the multiplicative inverse of the input number in two 8-bit unsigned temporary variables: s and x.
+  inverse = finiteInv(val)
+  s = inverse
+  x = inverse
+  #    Rotate the value s one bit to the left;
+  #     if the value of s had a high bit (eighth bit from the right) of one,
+  #     make the low bit of s one; otherwise the low bit of s is zero.
+  (0..3).each() do
+    s = ((s<<1)|(s>>7))&0xFF
+    x = s^x
+  end
+  return x
 end
 
 def rcon(inVal)
@@ -62,5 +81,75 @@ def rcon(inVal)
 end
 
 def sbox(inVal)
+  return transform(inVal)^99
+end
 
+def core(inval, i)
+  #Use rotate to rotate the output eight bits to the left
+  ret = rotL(inval)
+  #Apply Rijndael's S-box on all four individual bytes in the output word.
+  b4 = ret & 0xFF
+  b3 = (ret & 0xFF00)>>8
+  b2 = (ret & 0xFF0000)>>16
+  b1 = (ret & 0xFF000000)>>24
+
+  box1 = (sbox(b1)^rcon(i))<<24
+  box2 = sbox(b2)<<16
+  box3 = sbox(b3)<<8
+  box4 = sbox(b4)
+  puts box1.to_s(16)
+  puts box2.to_s(16)
+  #On just the first (leftmost, MSB) byte of the output word, exclusive or the byte with 2 to the power of i (rcon(i)).
+  ret = box1+box2+box3+box4
+  puts ret.to_s(16)
+
+
+
+  return ret
+end
+
+def keySchedule(key)
+  #Constants[edit]
+  #Since the key schedule for 128-bit, 192-bit, and 256-bit encryption are very similar,
+  # with only some constants changed, the following keysize constants are defined here:
+  #n has a value of 16 for 128-bit keys, 24 for 192-bit keys, and 32 for 256-bit keys
+  #b has a value of 176 for 128-bit keys, 208 for 192-bit keys,
+  # and 240 for 256-bit keys (with 128-bit blocks as in AES,
+  n = 0
+  b = 0
+  n = case (key.to_s(16).length/2)
+        when 0..16
+          n = 16
+          b = 176
+        when 17..24
+          n = 24
+          b = 208
+        when 25..32
+          n = 32
+          b = 240
+      end
+  ret = Array.new
+  #The first n bytes of the expanded key are simply the encryption key.
+  ret.push(key)
+  #    The rcon iteration value i is set to 1
+  i = 1
+  #Until we have b bytes of expanded key, we do the following to generate n more bytes of expanded key:
+  while(keybytes<b)
+  #   We do the following to create 4 bytes of expanded key:
+  #   We create a 4-byte temporary variable,
+  #   We assign the value of the previous four bytes in the expanded key to t
+  #   We perform the key schedule core (see above) on t, with i as the rcon iteration value
+  #   We increment i by 1
+  #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+  #We then do the following three times to create the next twelve bytes of expanded key:
+  #   We assign the value of the previous 4 bytes in the expanded key to t
+  #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+  #If we are processing a 256-bit key, we do the following to generate the next 4 bytes of expanded key:
+  #   We assign the value of the previous 4 bytes in the expanded key to t
+  #   We run each of the 4 bytes in t through Rijndael's S-box
+  #   We exclusive-OR t with the 4-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key.
+  #If we are processing a 128-bit key, we do not perform the following steps. If we are processing a 192-bit key, we run the following steps twice. If we are processing a 256-bit key, we run the following steps three times:
+  #   We assign the value of the previous 4 bytes in the expanded key to t
+  #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+  end
 end
