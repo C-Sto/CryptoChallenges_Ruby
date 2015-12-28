@@ -45,20 +45,52 @@ In particular: the "wokka wokka!!!" edit distance really is 37.
 =end
 
 require_relative("../Libs/StringFuncs")
+require_relative("../Libs/XorFuncs")
 require("base64")
 puts "Testing hamming code, should equal 37"
 puts hammingDistance("wokka wokka!!!", "this is a test")
 
 puts "Loading file"
 file = File.open("./Resources/6.txt").read()
-puts Base64.decode64(file)
-
+input = Base64.decode64(file)
 puts "Working out key-size"
 
-
-
-for possibleKeySize in 2..40
-  #Turn the file into chunks
+smallest = 9999
+smallkey = 0
+#find potential key size
+for possibleKeySize in 2..50
+  #Turn the file into chunks of keysize
+  this_chunk = chunk(input, possibleKeySize)
+  #find the smallest (normalised) hamming distance
+  count = 0
+  tot = 0.0
+  (0..4).each() do |k|
+      (0..4).each() do |l|
+        if(k!=l)
+          tot+=hammingDistance(this_chunk[k],this_chunk[l])/possibleKeySize
+          count+=1
+        end
+      end
+  end
+  dist = tot/count
+  if(dist<smallest)
+    smallest =  dist
+    smallkey = possibleKeySize
+  end
 end
 
+puts "Most likely keysize: " +smallkey.to_s()
+#keep the chunked data that is most likely the keysize
+keychunk = chunk(input, smallkey)
+#transpose it into blocks of each element (first block = first element of each chunk, etc)
+transposed = transpose(keychunk)
+key = ""
+#solve each transposed block for single char xor
+(0..transposed.size()-1).each() do |i|
+  key+= singleCharXorChar(transposed[i])
+end
+puts "calculated key: " +key
 
+#show the plaintext
+
+puts repeatingKeyXor(input,key)
