@@ -51,6 +51,7 @@ def finiteInv(val)
       return i
     end
   end
+  return 0
 end
 
 def transform(val)
@@ -82,6 +83,7 @@ end
 
 def sbox(inVal)
   return transform(inVal)^99
+
 end
 
 def core(inval, i)
@@ -92,20 +94,21 @@ def core(inval, i)
   b3 = (ret & 0xFF00)>>8
   b2 = (ret & 0xFF0000)>>16
   b1 = (ret & 0xFF000000)>>24
-
   box1 = (sbox(b1)^rcon(i))<<24
   box2 = sbox(b2)<<16
   box3 = sbox(b3)<<8
   box4 = sbox(b4)
-  puts box1.to_s(16)
-  puts box2.to_s(16)
   #On just the first (leftmost, MSB) byte of the output word, exclusive or the byte with 2 to the power of i (rcon(i)).
   ret = box1+box2+box3+box4
-  puts ret.to_s(16)
-
-
-
   return ret
+end
+
+def countKeyBites(ary)
+  rval = 0
+  ary.each() do |i|
+    rval+=i.size()
+  end
+  return rval
 end
 
 def keySchedule(key)
@@ -134,22 +137,36 @@ def keySchedule(key)
   #    The rcon iteration value i is set to 1
   i = 1
   #Until we have b bytes of expanded key, we do the following to generate n more bytes of expanded key:
-  while(keybytes<b)
+  keybytes = countKeyBites(ret)
+  while(keybytes!=b)
   #   We do the following to create 4 bytes of expanded key:
   #   We create a 4-byte temporary variable,
   #   We assign the value of the previous four bytes in the expanded key to t
+    tVal = ret[i-1] & 0xFFFFFFFF #gets last 4 bytes of previous key expansion
   #   We perform the key schedule core (see above) on t, with i as the rcon iteration value
+    tVal = core(tVal,i)
   #   We increment i by 1
+    i+=1
   #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+    tVal = tVal ^ (ret[i-2]>>96)
+    firstFour = tVal
   #We then do the following three times to create the next twelve bytes of expanded key:
-  #   We assign the value of the previous 4 bytes in the expanded key to t
-  #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
-  #If we are processing a 256-bit key, we do the following to generate the next 4 bytes of expanded key:
-  #   We assign the value of the previous 4 bytes in the expanded key to t
-  #   We run each of the 4 bytes in t through Rijndael's S-box
-  #   We exclusive-OR t with the 4-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key.
-  #If we are processing a 128-bit key, we do not perform the following steps. If we are processing a 192-bit key, we run the following steps twice. If we are processing a 256-bit key, we run the following steps three times:
-  #   We assign the value of the previous 4 bytes in the expanded key to t
-  #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+    (0..2).each() do |k|
+      #   We assign the value of the previous 4 bytes in the expanded key to t
+      #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+      tVal = tVal ^ (ret[i-2]>>(32*(2-k))&0xFFFFFFFF)
+      firstFour = (firstFour << 32)|tVal
+      #If we are processing a 256-bit key, we do the following to generate the next 4 bytes of expanded key:
+      #   We assign the value of the previous 4 bytes in the expanded key to t
+      #   We run each of the 4 bytes in t through Rijndael's S-box
+      #   We exclusive-OR t with the 4-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key.
+      #If we are processing a 128-bit key, we do not perform the following steps. If we are processing a 192-bit key, we run the following steps twice.
+      #   If we are processing a 256-bit key, we run the following steps three times:
+      #   We assign the value of the previous 4 bytes in the expanded key to t
+      #   We exclusive-OR t with the four-byte block n bytes before the new expanded key. This becomes the next 4 bytes in the expanded key
+    end
+    ret.push(firstFour)
+  keybytes = countKeyBites(ret)
   end
+  return ret
 end
