@@ -18,4 +18,5 @@ You'll need it a lot later on, and not just for attacking ECB.
 =end
 
 require_relative("../Libs/AES/AES")
-
+puts "here we go.."
+puts aes_core(0x00112233445566778899aabbccddeeff,0x000102030405060708090a0b0c0d0e0f).to_s(16)

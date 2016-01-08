@@ -1,17 +1,9 @@
-=begin
-
-=end
-
 def rot(val)
   return rotL(val)
 end
 
 def rotL(val)
   return ((val << 8) | (val >> (24))) & 0xFFFFFFFF
-end
-
-def rotR
-
 end
 
 def finMult(a, b)
