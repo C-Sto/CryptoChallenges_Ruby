@@ -5,6 +5,27 @@ def hexToBytes(string)
   return string.pack('H*')
 end
 
+def specLenHexStringToBytes(inVal,hexLen)
+  str = inVal
+  while(str.length<hexLen*2)
+    str="0"+str
+  end
+  return [str].pack('H*')
+end
+
+def specLenValToBytes(inHex,hexLen)
+  return specLenHexStringToBytes(inHex.to_s(16),hexLen)
+end
+
+def stringToHexValues(inString)
+  outString = ""
+  inString.each_byte() do |k|
+    outString = k.to_s(16).length < 2 ? outString+"0"+k.to_s(16) : outString+k.to_s(16)
+  end
+  return outString.to_i(16)
+  #return (inString.each_byte.map {|b| b.to_s(16)}.join).to_i(16)
+end
+
 def hammingDistance(in_str1, in_str2)
   count = 0
   if(in_str1.class == String && in_str2.class == String)

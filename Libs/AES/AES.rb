@@ -5,6 +5,7 @@ I have no idea what I'm doing
 
 require_relative("../../Libs/AES/KeyExpansion")
 require_relative("../../Libs/AES/Rounds")
+require_relative("../../Libs/StringFuncs")
 
 def aes_encrypt(input, key)
   #check for string, if string, turn it into number for aes
@@ -22,6 +23,17 @@ def aes_encrypt(input, key)
   aes_encrypt_core(verifiedInput,verifiedKey)
 end
 
+def aes_cbc_decrypt(input, key)
+  output = ""
+  (0..input.length/16).each() do |k|
+    begin
+      output = output+specLenValToBytes(aes_decrypt_core(stringToHexValues(input[(k*16)..((k*16)+15)]),stringToHexValues(key)),16)
+    rescue Exception => msg
+      puts "error: " + msg
+    end
+  end
+  return output
+end
 
 def aes_encrypt_core(inputBytes,key)
   expandedKey = keySchedule(key)
