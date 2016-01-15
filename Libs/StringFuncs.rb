@@ -62,3 +62,12 @@ def transpose(input)
   end
   return ret
 end
+
+def detect_ecb(input)
+  #takes a hex string input and looks for ECB by mapping duplicate blocks
+  zz = []
+  (0..input.length/32).each() do |i|
+    zz.push(input[i*32..(i*32)+31])
+  end
+  return !(zz.uniq.length == zz.length)
+end
