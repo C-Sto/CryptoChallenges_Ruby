@@ -1,4 +1,5 @@
 require_relative("TextAnalysis")
+require_relative("StringFuncs")
 
 def singleCharXorChar(xor_str)
   #returns a char that when xord against the supplied ciphertext results in english-like plaintext
@@ -46,4 +47,8 @@ def repeatingKeyXor(plain, key)
     end
   end
   return ret
+end
+
+def xor_two_strings_by_bytes(str1, str2)
+  return hexToBytes([(stringToHexValues(str1)^stringToHexValues(str2)).to_s(16)])
 end

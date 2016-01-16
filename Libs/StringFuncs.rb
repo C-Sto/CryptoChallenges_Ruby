@@ -39,10 +39,8 @@ end
 def chunk(input, chunk_size)
   #splits an input into chunks of specified size
   #outputs an array of chunks
-  count = 0
   out = Array.new
-  (0..input.size()).step(chunk_size) do |i|
-    count+=1
+  (0..input.size()-1).step(chunk_size) do |i|
     out.push(input[i..i+chunk_size-1])
   end
   return out

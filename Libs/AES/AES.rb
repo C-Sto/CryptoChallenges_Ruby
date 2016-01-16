@@ -23,9 +23,9 @@ def aes_encrypt(input, key)
   aes_encrypt_core(verifiedInput,verifiedKey)
 end
 
-def aes_cbc_decrypt(input, key)
+def aes_ecb_decrypt(input, key)
   output = ""
-  (0..input.length/16).each() do |k|
+  (0..(input.length/16)-1).each() do |k|
     begin
       output = output+specLenValToBytes(aes_decrypt_core(stringToHexValues(input[(k*16)..((k*16)+15)]),stringToHexValues(key)),16)
     rescue Exception => msg
@@ -69,6 +69,24 @@ def aes_decrypt_core(inputBytes, key)
   state = addRoundKey(state,expandedKey[0])
   return state
 end
-#key expansion
-#rounds
-#final round (no mix)
+
+
+def aes_cbc_decrypt(ciphertext, key, iv)
+  #for every block (starting with the end) decrypt it, then xor it against the previous block.
+  # Add this to the plaintext (working backwards)
+  #get the chunks
+  blocks = chunk(ciphertext,16)
+  plaintext = ""
+  currentBlock = ""
+  (1..blocks.size-1).reverse_each() do |i|
+
+    currentBlock = blocks[i]
+    currentBlock = aes_ecb_decrypt(currentBlock,key)
+    currentBlock = xor_two_strings_by_bytes(currentBlock, blocks[i-1])
+    plaintext = currentBlock+plaintext
+  end
+
+  #for the remaining block, decrypt it at the cipher core, then xor it against the iv
+  plaintext = xor_two_strings_by_bytes(aes_ecb_decrypt(blocks[0],key),iv) + plaintext
+  return plaintext
+end
