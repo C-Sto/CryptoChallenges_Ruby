@@ -13,4 +13,11 @@ So: pad any block to a specific block length, by appending the number of bytes o
 "YELLOW SUBMARINE\x04\x04\x04\x04"
 
 =end
+require_relative("../Libs/StringFuncs")
 
+
+v = pkcs7_pad('YELLOW SUBMARINE',20)
+
+puts v
+
+puts stringToHexValues(v).to_s(16)

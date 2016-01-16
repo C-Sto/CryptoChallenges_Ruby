@@ -71,3 +71,17 @@ def detect_ecb(input)
   end
   return !(zz.uniq.length == zz.length)
 end
+
+def pkcs7_pad(unpadded, blockSize)
+  padded = unpadded
+  padLen = unpadded.length
+  while(padLen>blockSize)
+    padLen = padLen-blockSize
+  end
+  bytesToPad = blockSize%padLen
+  puts bytesToPad
+  (1..bytesToPad).each() do
+    padded = padded + bytesToPad.chr
+  end
+  return padded
+end
